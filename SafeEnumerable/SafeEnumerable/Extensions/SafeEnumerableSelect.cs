@@ -9,8 +9,7 @@ namespace SafeEnumerable
     {
         public static ISafeEnumerable<TResult> Select<TValue, TResult>(this ISafeEnumerable<TValue> enumerable, Func<TValue, TResult> selector)
             => new SafeEnumerableForSelect<TValue, TResult>(enumerable, selector);
-
-
+        
         public static ISafeEnumerable<TResult> Select<TValue, TResult>(this ISafeEnumerable<TValue> enumerable, Func<TValue, int, TResult> selector)
             => new SafeEnumerableForSelectWithIdx<TValue, TResult>(enumerable, selector);
     }

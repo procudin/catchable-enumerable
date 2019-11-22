@@ -11,6 +11,6 @@ namespace SafeEnumerable
             => Enumerable.Repeat(value, 1).AsSafe();
 
         public static ISafeEnumerable<T> AsSafe<T>(this IEnumerable<T> enumerable)
-            => new SafeEnumerableInner<T>(enumerable);
+            => (enumerable is ISafeEnumerable<T>) ? (ISafeEnumerable<T>)enumerable : new SafeEnumerableInner<T>(enumerable);
     }
 }

@@ -13,8 +13,7 @@ namespace SafeEnumerable
         {
             this._enumerable = enumerable;
         }
-
-
+        
         public IEnumerator<T> GetEnumerator() => this._enumerable.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();

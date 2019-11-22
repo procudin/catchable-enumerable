@@ -18,6 +18,19 @@ namespace SafeEnumerable
         public static ISafeEnumerable<TValue> Catch<TValue, TException>(this ISafeEnumerable<TValue> enumerable, Action<TException> handler, Func<TValue> defaultValueOnException)
             where TException : Exception
             => new SafeEnumerableForCatch<TValue, TException>(enumerable, handler, _ => defaultValueOnException());
+        
+        public static void RunSafely<TValue>(this IEnumerable<TValue> enumerable, Action<AggregateException> handler = null)
+        {
+            var errors = new List<Exception>();
+            var safeEnumerable = enumerable.AsSafe().Catch((Exception e) => errors.Add(e));
+
+            foreach (var _ in safeEnumerable) { }
+
+            if (errors.Count > 0)
+            {
+                handler?.Invoke(new AggregateException(errors));
+            }
+        }
     }
 
 
