@@ -11,41 +11,41 @@ namespace CatchableEnumerable
         /// </summary>
         /// <typeparam name="TValue">Source type of objects to enumerate</typeparam>
         /// <typeparam name="TResult">Target type of objects to enumerate</typeparam>
-        /// <param name="enumerable">Source enumerable</param>
+        /// <param name="source">Source enumerable</param>
         /// <param name="selector">Projection</param>
         /// <returns>Target enumerable</returns>
         public static ICatchableEnumerable<TResult> Select<TValue, TResult>(
-            this ICatchableEnumerable<TValue> enumerable, 
+            this ICatchableEnumerable<TValue> source, 
             Func<TValue, TResult> selector)
-            => new CatchableEnumerableForSelect<TValue, TResult>(enumerable, selector);
+            => new CatchableEnumerableForSelect<TValue, TResult>(source, selector);
 
         /// <summary>
         /// Extends Enumerable.Select for exception handling
         /// </summary>
         /// <typeparam name="TValue">Source type of objects to enumerate</typeparam>
         /// <typeparam name="TResult">Target type of objects to enumerate</typeparam>
-        /// <param name="enumerable">Source enumerable</param>
+        /// <param name="source">Source enumerable</param>
         /// <param name="selector">Projection</param>
         /// <returns>Target enumerable</returns>
         public static ICatchableEnumerable<TResult> Select<TValue, TResult>(
-            this ICatchableEnumerable<TValue> enumerable, 
+            this ICatchableEnumerable<TValue> source, 
             Func<TValue, int, TResult> selector)
-            => new CatchableEnumerableForSelectWithIdx<TValue, TResult>(enumerable, selector);
+            => new CatchableEnumerableForSelectWithIdx<TValue, TResult>(source, selector);
     }
 
     internal class CatchableEnumerableForSelect<TValue, TResult> : ICatchableEnumerable<TResult>
     {
-        private readonly IEnumerable<TValue> enumerable;
+        private readonly IEnumerable<TValue> source;
 
         private readonly Func<TValue, TResult> selector;
 
-        internal CatchableEnumerableForSelect(IEnumerable<TValue> enumerable, Func<TValue, TResult> selector)
+        internal CatchableEnumerableForSelect(IEnumerable<TValue> source, Func<TValue, TResult> selector)
         {
-            this.enumerable = enumerable;
+            this.source = source;
             this.selector = selector;
         }
 
-        public IEnumerator<TResult> GetEnumerator() => new CatchableEnumeratorForSelect<TValue, TResult>(this.enumerable.GetEnumerator(), this.selector);
+        public IEnumerator<TResult> GetEnumerator() => new CatchableEnumeratorForSelect<TValue, TResult>(this.source.GetEnumerator(), this.selector);
 
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
@@ -88,16 +88,16 @@ namespace CatchableEnumerable
 
     internal class CatchableEnumerableForSelectWithIdx<TValue, TResult> : ICatchableEnumerable<TResult>
     {
-        private readonly IEnumerable<TValue> enumerable;
+        private readonly IEnumerable<TValue> source;
 
         private readonly Func<TValue, int, TResult> selector;
-        internal CatchableEnumerableForSelectWithIdx(IEnumerable<TValue> enumerable, Func<TValue, int, TResult> selector)
+        internal CatchableEnumerableForSelectWithIdx(IEnumerable<TValue> source, Func<TValue, int, TResult> selector)
         {
-            this.enumerable = enumerable;
+            this.source = source;
             this.selector = selector;
         }
 
-        public IEnumerator<TResult> GetEnumerator() => new CatchableEnumeratorForSelect<TValue, TResult>(this.enumerable.GetEnumerator(), this.selector);
+        public IEnumerator<TResult> GetEnumerator() => new CatchableEnumeratorForSelect<TValue, TResult>(this.source.GetEnumerator(), this.selector);
 
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 

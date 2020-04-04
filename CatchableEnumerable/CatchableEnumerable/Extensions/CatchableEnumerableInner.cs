@@ -9,14 +9,14 @@ namespace CatchableEnumerable
     /// <typeparam name="T">The type of objects to enumerate</typeparam>
     internal class CatchableEnumerableInner<T> : ICatchableEnumerable<T>
     {
-        private readonly IEnumerable<T> enumerable;
+        private readonly IEnumerable<T> source;
 
-        internal CatchableEnumerableInner(IEnumerable<T> enumerable)
+        internal CatchableEnumerableInner(IEnumerable<T> source)
         {
-            this.enumerable = enumerable;
+            this.source = source;
         }
         
-        public IEnumerator<T> GetEnumerator() => this.enumerable.GetEnumerator();
+        public IEnumerator<T> GetEnumerator() => this.source.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     }

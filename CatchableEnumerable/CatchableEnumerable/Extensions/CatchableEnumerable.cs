@@ -11,11 +11,11 @@ namespace CatchableEnumerable
         /// Moves <see cref="IEnumerable{T}"/> to catchable context
         /// </summary>
         /// <typeparam name="T">The type of objects to enumerate</typeparam>
-        /// <param name="enumerable">Source enumerable</param>
+        /// <param name="enumerable">Source source</param>
         /// <returns>Enumerable with catchable context</returns>
-        public static ICatchableEnumerable<T> AsCatchable<T>(this IEnumerable<T> enumerable)
-            => (enumerable is ICatchableEnumerable<T>)
-                ? (ICatchableEnumerable<T>)enumerable
-                : new CatchableEnumerableInner<T>(enumerable);
+        public static ICatchableEnumerable<T> AsCatchable<T>(this IEnumerable<T> source)
+            => (source is ICatchableEnumerable<T>)
+                ? (ICatchableEnumerable<T>)source
+                : new CatchableEnumerableInner<T>(source);
     }
 }

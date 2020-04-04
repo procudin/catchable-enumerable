@@ -34,17 +34,17 @@ namespace CatchableEnumerable
 
     internal class CatchableEnumerableForWhere<T> : ICatchableEnumerable<T>
     {
-        private readonly IEnumerable<T> enumerable;
+        private readonly IEnumerable<T> source;
 
         private readonly Func<T, bool> predicate;
 
-        internal CatchableEnumerableForWhere(IEnumerable<T> enumerable, Func<T, bool> predicate)
+        internal CatchableEnumerableForWhere(IEnumerable<T> source, Func<T, bool> predicate)
         {
-            this.enumerable = enumerable;
+            this.source = source;
             this.predicate = predicate;
         }
 
-        public IEnumerator<T> GetEnumerator() => new CatchableEnumeratorForWhere<T>(this.enumerable.GetEnumerator(), this.predicate);
+        public IEnumerator<T> GetEnumerator() => new CatchableEnumeratorForWhere<T>(this.source.GetEnumerator(), this.predicate);
 
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 
@@ -92,16 +92,17 @@ namespace CatchableEnumerable
 
     internal class CatchableEnumerableForWhereWithIdx<T> : ICatchableEnumerable<T>
     {
-        private readonly IEnumerable<T> enumerable;
+        private readonly IEnumerable<T> source;
 
         private readonly Func<T, int, bool> predicate;
-        internal CatchableEnumerableForWhereWithIdx(IEnumerable<T> enumerable, Func<T, int, bool> predicate)
+
+        internal CatchableEnumerableForWhereWithIdx(IEnumerable<T> source, Func<T, int, bool> predicate)
         {
-            this.enumerable = enumerable;
+            this.source = source;
             this.predicate = predicate;
         }
 
-        public IEnumerator<T> GetEnumerator() => new CatchableEnumeratorForWhereWithIdx<T>(this.enumerable.GetEnumerator(), this.predicate);
+        public IEnumerator<T> GetEnumerator() => new CatchableEnumeratorForWhereWithIdx<T>(this.source.GetEnumerator(), this.predicate);
 
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 

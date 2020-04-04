@@ -79,24 +79,25 @@ namespace CatchableEnumerable
 
     internal class CatchableEnumerableForSelectManyWithProjection<TSource, TCollection, TResult> : ICatchableEnumerable<TResult>
     {
-        private readonly IEnumerable<TSource> enumerable;
+        private readonly IEnumerable<TSource> source;
 
         private readonly Func<TSource, IEnumerable<TCollection>> collectionSelector;
 
         private readonly Func<TSource, TCollection, TResult> resultSelector;
 
-        internal CatchableEnumerableForSelectManyWithProjection(IEnumerable<TSource> enumerable,
+        internal CatchableEnumerableForSelectManyWithProjection(
+            IEnumerable<TSource> source,
             Func<TSource, IEnumerable<TCollection>> collectionSelector,
             Func<TSource, TCollection, TResult> resultSelector)
         {
-            this.enumerable = enumerable;
+            this.source = source;
             this.collectionSelector = collectionSelector;
             this.resultSelector = resultSelector;
         }
 
         public IEnumerator<TResult> GetEnumerator()
             => new CatchableEnumeratorForSelectManyWithProjection<TSource,TCollection,TResult>(
-                this.enumerable.GetEnumerator(), 
+                this.source.GetEnumerator(), 
                 this.collectionSelector, 
                 this.resultSelector);
 
@@ -156,24 +157,25 @@ namespace CatchableEnumerable
 
     internal class CatchableEnumerableForSelectManyWithProjectionWithIdx<TSource, TCollection, TResult> : ICatchableEnumerable<TResult>
     {
-        private readonly IEnumerable<TSource> enumerable;
+        private readonly IEnumerable<TSource> source;
 
         private readonly Func<TSource, int, IEnumerable<TCollection>> collectionSelector;
 
         private readonly Func<TSource, TCollection, TResult> resultSelector;
 
-        internal CatchableEnumerableForSelectManyWithProjectionWithIdx(IEnumerable<TSource> enumerable,
+        internal CatchableEnumerableForSelectManyWithProjectionWithIdx(
+            IEnumerable<TSource> source,
             Func<TSource, int, IEnumerable<TCollection>> collectionSelector,
             Func<TSource, TCollection, TResult> resultSelector)
         {
-            this.enumerable = enumerable;
+            this.source = source;
             this.collectionSelector = collectionSelector;
             this.resultSelector = resultSelector;
         }
 
         public IEnumerator<TResult> GetEnumerator()
             => new CatchableEnumeratorForSelectManyWithProjectionWithIdx<TSource, TCollection, TResult>(
-                this.enumerable.GetEnumerator(),
+                this.source.GetEnumerator(),
                 this.collectionSelector,
                 this.resultSelector);
 
@@ -236,20 +238,21 @@ namespace CatchableEnumerable
 
     internal class CatchableEnumerableForSelectMany<TSource, TResult> : ICatchableEnumerable<TResult>
     {
-        private readonly IEnumerable<TSource> enumerable;
+        private readonly IEnumerable<TSource> source;
 
         private readonly Func<TSource, IEnumerable<TResult>> selector;
 
-        internal CatchableEnumerableForSelectMany(IEnumerable<TSource> enumerable,
+        internal CatchableEnumerableForSelectMany(
+            IEnumerable<TSource> source,
             Func<TSource, IEnumerable<TResult>> selector)
         {
-            this.enumerable = enumerable;
+            this.source = source;
             this.selector = selector;
         }
 
         public IEnumerator<TResult> GetEnumerator()
             => new CatchableEnumeratorForSelectMany<TSource, TResult>(
-                this.enumerable.GetEnumerator(),
+                this.source.GetEnumerator(),
                 this.selector);
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -305,21 +308,21 @@ namespace CatchableEnumerable
 
     internal class CatchableEnumerableForSelectManyWithIdx<TSource, TResult> : ICatchableEnumerable<TResult>
     {
-        private readonly IEnumerable<TSource> enumerable;
+        private readonly IEnumerable<TSource> source;
 
         private readonly Func<TSource, int, IEnumerable<TResult>> selector;
 
         internal CatchableEnumerableForSelectManyWithIdx(
-            IEnumerable<TSource> enumerable,
+            IEnumerable<TSource> source,
             Func<TSource, int, IEnumerable<TResult>> selector)
         {
-            this.enumerable = enumerable;
+            this.source = source;
             this.selector = selector;
         }
 
         public IEnumerator<TResult> GetEnumerator()
             => new CatchableEnumeratorForSelectManyWithIdx<TSource, TResult>(
-                this.enumerable.GetEnumerator(),
+                this.source.GetEnumerator(),
                 this.selector);
 
         IEnumerator IEnumerable.GetEnumerator()
