@@ -11,6 +11,32 @@ namespace CatchableEnumerableTests
     public class CatchableEnumerableSelectTest
     {
         [Fact]
+        public void EquivivalenceWithDefaultLinqTest()
+        {
+            var defaultLinq = Enumerable.Range(0, 5)                
+                .Select(v => v.ToString())
+                .ToList();
+            var catchableLinq = Enumerable.Range(0, 5)
+                .AsCatchable()
+                .Select(v => v.ToString())
+                .Catch((Exception e) => { })
+                .ToList();
+            Assert.Equal(defaultLinq.JoinWith(","), catchableLinq.JoinWith(","));
+
+
+            defaultLinq = Enumerable.Range(5, 5)
+                .Select((v, idx) => idx.ToString())
+                .ToList();
+            catchableLinq = Enumerable.Range(5, 5)
+                .AsCatchable()
+                .Select((v, idx) => idx.ToString())
+                .Catch((Exception e) => { })
+                .ToList();
+            Assert.Equal(defaultLinq.JoinWith(","), catchableLinq.JoinWith(","));
+        }   
+
+
+        [Fact]
         public void SelectCatchingTest()
         {
             var collectionWithEx = Enumerable.Range(0, 5)
@@ -41,10 +67,15 @@ namespace CatchableEnumerableTests
                     .Catch((InvalidOperationException e) => { /* Do nothing */ })
                     .ToList());
 
-            // Must not throw if we handle all exceptions + handler action test            
+            // Must not throw if we handle all exceptions   
             collectionWithEx
                 .Catch((ArgumentException e) => {  })
                 .Catch((InvalidOperationException e) => { })
+                .ToList();
+
+            // Must not throw if we handle all exceptions   
+            collectionWithEx
+                .Catch((Exception e) => { })
                 .ToList();
         }
 
