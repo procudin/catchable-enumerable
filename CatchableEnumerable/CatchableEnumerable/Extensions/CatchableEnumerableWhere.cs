@@ -7,10 +7,25 @@ namespace CatchableEnumerable
 {
     public static partial class CatchableEnumerable
     {
+        /// <summary>
+        /// Extends Enumerable.Where for exception handling
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of source</typeparam>
+        /// <param name="source">Enumerable to filter</param>
+        /// <param name="predicate">A function to test each source element for a condition; the second parameter of the function represents the index of the source element</param>
+        /// <returns>An <see cref="ICatchableEnumerable{T}"/> that contains elements from the input sequence that satisfy the condition</returns>
         public static ICatchableEnumerable<T> Where<T>(
-            this ICatchableEnumerable<T> enumerable, 
+            this ICatchableEnumerable<T> source, 
             Func<T, bool> predicate)
-            => new CatchableEnumerableForWhere<T>(enumerable, predicate);
+            => new CatchableEnumerableForWhere<T>(source, predicate);
+
+        /// <summary>
+        /// Extends Enumerable.Where for exception handling
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of source</typeparam>
+        /// <param name="source">Enumerable to filter</param>
+        /// <param name="predicate">A function to test each source element for a condition; the second parameter of the function represents the index of the source element</param>
+        /// <returns>An <see cref="ICatchableEnumerable{T}"/> that contains elements from the input sequence that satisfy the condition</returns>
 
         public static ICatchableEnumerable<T> Where<T>(
             this ICatchableEnumerable<T> enumerable, 

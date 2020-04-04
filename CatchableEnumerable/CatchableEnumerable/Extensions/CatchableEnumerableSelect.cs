@@ -7,11 +7,27 @@ namespace CatchableEnumerable
 {
     public static partial class CatchableEnumerable
     {
+        /// <summary>
+        /// Extends Enumerable.Select for exception handling
+        /// </summary>
+        /// <typeparam name="TValue">Source type of objects to enumerate</typeparam>
+        /// <typeparam name="TResult">Target type of objects to enumerate</typeparam>
+        /// <param name="enumerable">Source enumerable</param>
+        /// <param name="selector">Projection</param>
+        /// <returns>Target enumerable</returns>
         public static ICatchableEnumerable<TResult> Select<TValue, TResult>(
             this ICatchableEnumerable<TValue> enumerable, 
             Func<TValue, TResult> selector)
             => new CatchableEnumerableForSelect<TValue, TResult>(enumerable, selector);
-        
+
+        /// <summary>
+        /// Extends Enumerable.Select for exception handling
+        /// </summary>
+        /// <typeparam name="TValue">Source type of objects to enumerate</typeparam>
+        /// <typeparam name="TResult">Target type of objects to enumerate</typeparam>
+        /// <param name="enumerable">Source enumerable</param>
+        /// <param name="selector">Projection</param>
+        /// <returns>Target enumerable</returns>
         public static ICatchableEnumerable<TResult> Select<TValue, TResult>(
             this ICatchableEnumerable<TValue> enumerable, 
             Func<TValue, int, TResult> selector)

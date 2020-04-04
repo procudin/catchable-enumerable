@@ -5,6 +5,10 @@ using System.Text;
 
 namespace CatchableEnumerable
 {
+    /// <summary>
+    /// Internal implementation of <see cref="ICatchableEnumerable{T}"/> interface
+    /// </summary>
+    /// <typeparam name="T">The type of objects to enumerate</typeparam>
     internal class CatchableEnumerableInner<T> : ICatchableEnumerable<T>
     {
         private readonly IEnumerable<T> enumerable;
