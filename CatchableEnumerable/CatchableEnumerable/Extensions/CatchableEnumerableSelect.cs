@@ -125,9 +125,8 @@ namespace CatchableEnumerable
             {
                 if (!enumerator.MoveNext()) return false;
 
-                var current = selector(this.enumerator.Current, this.idx);
+                var current = selector(this.enumerator.Current, this.idx++);
                 this.Current = current;
-                ++this.idx;
                 return true;
             }
 
