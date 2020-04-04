@@ -8,7 +8,7 @@ using Xunit;
 namespace CatchableEnumerableTests
 {
     
-    public class CatachableEnumerableSelectTest
+    public class CatchableEnumerableSelectTest
     {
         [Fact]
         public void SelectCatchingTest()
