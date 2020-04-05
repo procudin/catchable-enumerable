@@ -1,0 +1,12 @@
+language: csharp
+mono: none
+dotnet: 3.1
+
+before_install:
+
+install:
+- dotnet restore
+
+script:  
+  - dotnet build -f netcoreapp3.1
+  - dotnet test ./CatchableEnumerableTests/CatchableEnumerableTests.csproj

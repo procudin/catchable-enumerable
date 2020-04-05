@@ -50,7 +50,6 @@ namespace CatchableEnumerable
         /// Extends Enumerable.SelectMany for exception handling
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of source</typeparam>
-        /// <typeparam name="TCollection">The type of the intermediate elements collected by collectionSelector</typeparam>
         /// <typeparam name="TResult">The type of the elements of the resulting sequence</typeparam>
         /// <param name="source">A sequence of values to project</param>
         /// <param name="selector">A transform function to apply to each element of the source sequence</param>
@@ -65,7 +64,6 @@ namespace CatchableEnumerable
         /// Extends Enumerable.SelectMany for exception handling
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of source</typeparam>
-        /// <typeparam name="TCollection">The type of the intermediate elements collected by collectionSelector</typeparam>
         /// <typeparam name="TResult">The type of the elements of the resulting sequence</typeparam>
         /// <param name="source">A sequence of values to project</param>
         /// <param name="selector">A transform function to apply to each element of the source sequence</param>
