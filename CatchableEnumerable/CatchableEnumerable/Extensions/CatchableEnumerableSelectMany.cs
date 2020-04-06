@@ -112,7 +112,8 @@ namespace CatchableEnumerable
 
             private readonly Func<TSource, TCollection, TResult> resultSelector;
 
-            internal CatchableEnumeratorForSelectManyWithProjection(IEnumerator<TSource> enumerator,
+            internal CatchableEnumeratorForSelectManyWithProjection(
+                IEnumerator<TSource> enumerator,
                 Func<TSource, IEnumerable<TCollection>> collectionSelector,
                 Func<TSource, TCollection, TResult> resultSelector)
             {
@@ -128,6 +129,8 @@ namespace CatchableEnumerable
                     this.Current = this.resultSelector(this.enumerator.Current, this.innerEnumerator.Current);
                     return true;
                 }
+
+                this.innerEnumerator?.Dispose();
 
                 if (enumerator.MoveNext())
                 {
@@ -149,6 +152,7 @@ namespace CatchableEnumerable
 
             public void Dispose()
             {
+                this.enumerator.Dispose();
             }
         }
     }
@@ -210,6 +214,8 @@ namespace CatchableEnumerable
                     return true;
                 }
 
+                this.innerEnumerator?.Dispose();
+
                 if (enumerator.MoveNext())
                 {
                     this.innerEnumerator = this.collectionSelector(enumerator.Current, this.idx++)?.GetEnumerator();
@@ -230,6 +236,7 @@ namespace CatchableEnumerable
 
             public void Dispose()
             {
+                this.enumerator.Dispose();
             }
         }
     }
@@ -266,7 +273,7 @@ namespace CatchableEnumerable
 
             internal CatchableEnumeratorForSelectMany(
                 IEnumerator<TSource> enumerator,
-                 Func<TSource, IEnumerable<TResult>> selector)
+                Func<TSource, IEnumerable<TResult>> selector)
             {
                 this.enumerator = enumerator;
                 this.selector = selector;
@@ -279,6 +286,8 @@ namespace CatchableEnumerable
                     this.Current = this.innerEnumerator.Current;
                     return true;
                 }
+
+                this.innerEnumerator?.Dispose();
 
                 if (enumerator.MoveNext())
                 {
@@ -300,6 +309,7 @@ namespace CatchableEnumerable
 
             public void Dispose()
             {
+                this.enumerator.Dispose();
             }
         }
     }
@@ -353,6 +363,8 @@ namespace CatchableEnumerable
                     return true;
                 }
 
+                this.innerEnumerator?.Dispose();
+
                 if (enumerator.MoveNext())
                 {
                     this.innerEnumerator = this.selector(enumerator.Current, idx++)?.GetEnumerator();
@@ -373,6 +385,7 @@ namespace CatchableEnumerable
 
             public void Dispose()
             {
+                this.enumerator.Dispose();
             }
         }
     }

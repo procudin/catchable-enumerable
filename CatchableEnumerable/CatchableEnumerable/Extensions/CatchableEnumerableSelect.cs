@@ -63,7 +63,7 @@ namespace CatchableEnumerable
 
             public void Dispose()
             {
-
+                this.enumerator.Dispose();
             }
 
             public bool MoveNext()
@@ -91,6 +91,7 @@ namespace CatchableEnumerable
         private readonly IEnumerable<TValue> source;
 
         private readonly Func<TValue, int, TResult> selector;
+
         internal CatchableEnumerableForSelectWithIdx(IEnumerable<TValue> source, Func<TValue, int, TResult> selector)
         {
             this.source = source;
@@ -118,7 +119,7 @@ namespace CatchableEnumerable
 
             public void Dispose()
             {
-
+                this.enumerator.Dispose();
             }
 
             public bool MoveNext()

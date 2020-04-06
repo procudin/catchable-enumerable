@@ -93,7 +93,7 @@ namespace CatchableEnumerable
 
             public void Dispose()
             {
-
+                this.enumerator.Dispose();
             }
 
             public bool MoveNext()
