@@ -2,7 +2,7 @@
 
 Extends default LINQ operations with exception handling method.
 
-![Nuget](https://img.shields.io/nuget/v/CatchableEnumerable?style=plastic)
+[![Nuget](https://img.shields.io/nuget/v/CatchableEnumerable?style=plastic)](https://www.nuget.org/packages/CatchableEnumerable/)
 
 ## Motivation
 
