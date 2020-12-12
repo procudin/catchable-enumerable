@@ -2,6 +2,8 @@
 
 Extends default LINQ operations with exception handling method.
 
+![Nuget](https://img.shields.io/nuget/v/CatchableEnumerable?style=plastic)
+
 ## Motivation
 
 Sometimes there is a situation where we need to perform several consecutive transformations for the original collection. This can be done easily by using LINQ.
