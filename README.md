@@ -35,7 +35,7 @@ var target = source
     .ToArray();
 ```
 
-The CatchableEnumerable library takes care of all the work, allowing you to write concise functional code in a declarative style:
+The CatchableEnumerable library takes care of all the work, allowing you to write concise functional code with declarative style:
 
 ```cs
 var target = source.AsCatchable() // move source to catchable context
