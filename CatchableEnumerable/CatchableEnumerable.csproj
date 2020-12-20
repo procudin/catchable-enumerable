@@ -4,6 +4,14 @@
     <TargetFrameworks>netstandard1.0;netcoreapp1.0;net35;netcoreapp3.1</TargetFrameworks>
     <AssemblyName>CatchableEnumerable</AssemblyName>
     <RootNamespace>CatchableEnumerable</RootNamespace>
+    <Authors>Prokudin Artem</Authors>
+    <Product />
+    <Description>Extends default LINQ operations with exception handling method.</Description>
+    <RepositoryUrl>https://github.com/procudin/catchable-enumerable</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageTags>exception handling, linq</PackageTags>
+    <PackageProjectUrl>https://github.com/procudin/catchable-enumerable</PackageProjectUrl>
+    <Copyright>MIT</Copyright>
   </PropertyGroup>
 
 </Project>
