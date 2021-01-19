@@ -44,3 +44,45 @@ var target = source.AsCatchable() // move source to catchable context
     .Select(v => v * 2)
     .ToArray();
 ```
+
+# Details
+
+The library uses it's own interface -- ```ICatchableEnumerable<T>```, which is just a wrapper for  ```IEnumerable<T>```. It can be created from ```IEnumerable<T>``` with ```AsCatchable()``` extension method.
+```cs
+var source = Enumerable.Range(0, 5); // typeof(source) == IEnumerable<int>
+var target = source.AsCatchable();   // typeof(target) == ICatchableEnumerable<int>
+```
+
+Objects of ```ICatchableEnumerable<T>``` can use library-provided extenions for ```Select```, ```SelectMany``` and ```Where``` operations. This extensions consume and produce ```ICatchableEnumerable``` objects, so it is possible to create a chain of exception-safe transformations: 
+```cs
+target = target
+    .Select(i => {
+        if (i == 2)
+            throw new ArgumentException("2");
+        return i;
+    })
+    .Where(i => {
+        if (i == 3)
+            throw new NotImplementedException("3");
+        return true;
+    });
+```
+Finally you can handle exceptions with ```Catch``` extension method:
+
+```cs
+var handledTarget = target
+    .Catch((ArgumentException ex) => { })                  // skip problem item
+    .Catch((NotImplementedException ex) => { }, () => -3); // replace it with default one
+string.Join(",", target); // "0,1,-3,4"
+```
+
+Note that the order of the ```Catch``` methods is important. If the type of the handled exception is wider than folowing onces, they won't be handled:
+
+```cs
+var handledTarget = target
+    .Catch((ArgumentException ex) => { })  
+    .Catch((Exception ex) => { })           // wider than folowing
+    .Catch((NotImplementedException ex) => { /* will never be called */ }, () => -3);
+string.Join(",", target); // "0,1,4"
+```
+
