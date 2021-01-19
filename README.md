@@ -6,7 +6,7 @@ Extends default LINQ operations with exception handling method.
 
 ## Motivation
 
-Sometimes there is a situation where we need to perform several consecutive transformations for the original collection. This can be done easily by using LINQ.
+Sometimes there is a situation when we need to perform several consecutive transformations for the original collection. This can be done easily with LINQ.
 
 ```cs
 var source = new[] { "123", "0", null, "1" };
@@ -16,7 +16,7 @@ var target = source
     .ToArray();
 ```
 
-But sometimes it happens that a function called inside a request can throw an exception, which in some cases we can be ignored, however we must write a bunch of boilerplate to handle this exception:
+But sometimes it's happens that a function called inside a request can throw an exception, which in some cases can be ignored or replaced with default value. However we must write a bunch of boilerplate to handle this exception:
 
 ```cs
 var target = source
