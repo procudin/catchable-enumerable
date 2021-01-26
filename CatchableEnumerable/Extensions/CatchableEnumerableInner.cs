@@ -7,7 +7,7 @@ namespace CatchableEnumerable
     /// Internal implementation of <see cref="ICatchableEnumerable{T}"/> interface
     /// </summary>
     /// <typeparam name="T">The type of objects to enumerate</typeparam>
-    internal readonly struct CatchableEnumerableInner<T> : ICatchableEnumerable<T>
+    internal class CatchableEnumerableInner<T> : ICatchableEnumerable<T>
     {
         private readonly IEnumerable<T> _source;
 
