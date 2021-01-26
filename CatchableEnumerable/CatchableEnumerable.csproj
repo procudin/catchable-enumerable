@@ -12,6 +12,7 @@
     <PackageTags>exception handling, linq</PackageTags>
     <PackageProjectUrl>https://github.com/procudin/catchable-enumerable</PackageProjectUrl>
     <Copyright>MIT</Copyright>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
 </Project>
