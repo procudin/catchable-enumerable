@@ -14,11 +14,8 @@ namespace CatchableEnumerable
         /// <param name="source">Source enumerable</param>
         /// <param name="handler">Exception handler</param>
         /// <returns>Enumerable without values that raises an exception</returns>
-        public static ICatchableEnumerable<TValue> Catch<TValue, TException>(
-            this ICatchableEnumerable<TValue> source, 
-            Action<TException> handler)
-            where TException : Exception
-                => new CatchableEnumerableForCatch<TValue, TException>(source, handler, null);
+        public static ICatchableEnumerable<TValue> Catch<TValue, TException>(this ICatchableEnumerable<TValue> source, Action<TException> handler) where TException : Exception => 
+            new CatchableEnumerableForCatch<TValue, TException>(source, handler);
 
         /// <summary>
         /// Provides catching exceptions and returns enumerable with user-defined values for failure elements
@@ -29,12 +26,8 @@ namespace CatchableEnumerable
         /// <param name="handler">Exception handler</param>
         /// <param name="defaultValueOnException">Value selector for exception state</param>
         /// <returns>Enumerable with user-defined values for failure elements</returns>
-        public static ICatchableEnumerable<TValue> Catch<TValue, TException>(
-            this ICatchableEnumerable<TValue> source, 
-            Action<TException> handler, 
-            Func<TException, TValue> defaultValueOnException)
-            where TException : Exception
-            => new CatchableEnumerableForCatch<TValue, TException>(source, handler, defaultValueOnException);
+        public static ICatchableEnumerable<TValue> Catch<TValue, TException>(this ICatchableEnumerable<TValue> source, Action<TException> handler, Func<TException, TValue> defaultValueOnException) where TException : Exception => 
+            new CatchableEnumerableForCatchWithDefault<TValue, TException>(source, handler, defaultValueOnException);
 
         /// <summary>
         /// Provides catching exceptions and returns enumerable with user-defined values for failure elements
@@ -45,55 +38,52 @@ namespace CatchableEnumerable
         /// <param name="handler">Exception handler</param>
         /// <param name="defaultValueOnException">Value selector for exception state</param>
         /// <returns>Enumerable with user-defined values for failure elements</returns>
-        public static ICatchableEnumerable<TValue> Catch<TValue, TException>(
-            this ICatchableEnumerable<TValue> source, 
-            Action<TException> handler, 
-            Func<TValue> defaultValueOnException)
-            where TException : Exception
-            => new CatchableEnumerableForCatch<TValue, TException>(source, handler, _ => defaultValueOnException());
+        public static ICatchableEnumerable<TValue> Catch<TValue, TException>(this ICatchableEnumerable<TValue> source, Action<TException> handler, Func<TValue> defaultValueOnException) where TException : Exception => 
+            new CatchableEnumerableForCatchWithDefault<TValue, TException>(source, handler, _ => defaultValueOnException());
     }
 
 
-    internal class CatchableEnumerableForCatch<TValue, TException> : ICatchableEnumerable<TValue>
+    internal class CatchableEnumerableForCatchWithDefault<TValue, TException> : ICatchableEnumerable<TValue>
         where TException : Exception
     {
-        private readonly IEnumerable<TValue> source;
+        private readonly IEnumerable<TValue> _source;
 
-        private readonly Action<TException> handler;
+        private readonly Action<TException> _handler;
 
-        private readonly Func<TException, TValue> defaultValueOnException;
+        private readonly Func<TException, TValue> _defaultValueOnException;
 
-        internal CatchableEnumerableForCatch(IEnumerable<TValue> enumerable, Action<TException> handler, Func<TException, TValue> defaultValueOnException = null)
+        internal CatchableEnumerableForCatchWithDefault(IEnumerable<TValue> enumerable, Action<TException> handler, Func<TException, TValue> defaultValueOnException = null)
         {
-            this.source = enumerable;
-            this.handler = handler;
-            this.defaultValueOnException = defaultValueOnException;
+            _source = enumerable;
+            _handler = handler;
+            _defaultValueOnException = defaultValueOnException;
         }
 
-        public IEnumerator<TValue> GetEnumerator() => new CatchableEnumeratorForCatch<TValue, TException>(this.source.GetEnumerator(), this.handler, this.defaultValueOnException);
+        public IEnumerator<TValue> GetEnumerator() => 
+            new CatchableEnumeratorForCatchWithDefault<TValue, TException>(_source.GetEnumerator(), _handler, _defaultValueOnException);
 
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 
-        internal class CatchableEnumeratorForCatch<TValue, TException> : IEnumerator<TValue>
+        private class CatchableEnumeratorForCatchWithDefault<TValue, TException> : IEnumerator<TValue>
             where TException : Exception
         {
-            private readonly IEnumerator<TValue> enumerator;
+            private readonly IEnumerator<TValue> _enumerator;
 
-            private readonly Action<TException> handler;
+            private readonly Action<TException> _handler;
 
-            private readonly Func<TException, TValue> defaultValueOnException;
+            private readonly Func<TException, TValue> _defaultValueOnException;
 
-            public CatchableEnumeratorForCatch(IEnumerator<TValue> enumerator, Action<TException> handler, Func<TException, TValue> defaultValueOnException = null)
+            public CatchableEnumeratorForCatchWithDefault(IEnumerator<TValue> enumerator, Action<TException> handler, Func<TException, TValue> defaultValueOnException = null)
             {
-                this.enumerator = enumerator;
-                this.handler = handler;
-                this.defaultValueOnException = defaultValueOnException;
+                _enumerator = enumerator;
+                _handler = handler;
+                _defaultValueOnException = defaultValueOnException;
             }
 
             public void Dispose()
             {
-                this.enumerator.Dispose();
+                _enumerator.Dispose();
             }
 
             public bool MoveNext()
@@ -102,9 +92,9 @@ namespace CatchableEnumerable
                 {
                     try
                     {
-                        if (this.enumerator.MoveNext())
+                        if (_enumerator.MoveNext())
                         {
-                            this.Current = this.enumerator.Current;
+                            Current = _enumerator.Current;
                             return true;
                         }
 
@@ -112,10 +102,10 @@ namespace CatchableEnumerable
                     }
                     catch (TException e)
                     {
-                        this.handler(e);
-                        if (this.defaultValueOnException != null)
+                        _handler(e);
+                        if (_defaultValueOnException != null)
                         {
-                            this.Current = this.defaultValueOnException(e);
+                            Current = _defaultValueOnException(e);
                             return true;
                         }
                     }
@@ -129,7 +119,76 @@ namespace CatchableEnumerable
 
             public TValue Current { get; private set; }
 
-            object IEnumerator.Current => this.Current;
+            object IEnumerator.Current => Current;
+        }
+    }
+
+    internal class CatchableEnumerableForCatch<TValue, TException> : ICatchableEnumerable<TValue>
+        where TException : Exception
+    {
+        private readonly IEnumerable<TValue> _source;
+
+        private readonly Action<TException> _handler;
+
+        internal CatchableEnumerableForCatch(IEnumerable<TValue> enumerable, Action<TException> handler)
+        {
+            _source = enumerable;
+            _handler = handler;
+        }
+
+        public IEnumerator<TValue> GetEnumerator() =>
+            new CatchableEnumeratorForCatch<TValue, TException>(_source.GetEnumerator(), _handler);
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+
+        private class CatchableEnumeratorForCatch<TValue, TException> : IEnumerator<TValue>
+            where TException : Exception
+        {
+            private readonly IEnumerator<TValue> _enumerator;
+
+            private readonly Action<TException> _handler;
+
+            public CatchableEnumeratorForCatch(IEnumerator<TValue> enumerator, Action<TException> handler)
+            {
+                _enumerator = enumerator;
+                _handler = handler;
+            }
+
+            public void Dispose()
+            {
+                _enumerator.Dispose();
+            }
+
+            public bool MoveNext()
+            {
+                while (true)
+                {
+                    try
+                    {
+                        if (_enumerator.MoveNext())
+                        {
+                            Current = _enumerator.Current;
+                            return true;
+                        }
+
+                        return false;
+                    }
+                    catch (TException e)
+                    {
+                        _handler(e);
+                    }
+                }
+            }
+
+            public void Reset()
+            {
+                throw new InvalidOperationException();
+            }
+
+            public TValue Current { get; private set; }
+
+            object IEnumerator.Current => Current;
         }
     }
 }
